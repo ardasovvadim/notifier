@@ -21,4 +21,4 @@ Notifier is a .NET Core background service that synchronizes new movie seasons f
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
