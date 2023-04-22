@@ -1,0 +1,20 @@
+@model Notifier.BackgroundService.Host.Contracts.Emails.ErrorEmailModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error Notification</title>
+</head>
+<body>
+    <p>Dear administrator,</p>
+    <p>An error has occurred in the system:</p>
+    <pre>@Model.ErrorText</pre>
+    <p>Please take appropriate action to resolve the issue.</p>
+    <p>Thank you.</p>
+</body>
+</html>
