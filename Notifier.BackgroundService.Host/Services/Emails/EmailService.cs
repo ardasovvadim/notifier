@@ -46,11 +46,11 @@ public class EmailService : IEmailService
         
         var htmlContent = await _emailTemplateRenderer.RenderEmailTemplateAsync(EmailTemplate.NewSeriesNotificationTemplate, model);
         
-        _logger.LogInformation("Trying to send email with {MoviesCount} movies", model.Movies.Count);
+        _logger.LogInformation("Trying to send email with new movies");
 
         await SendEmailAsync("New series available", htmlContent, ToTextPlain(model));
 
-        _logger.LogInformation("Email with {MoviesCount} movies was sent", model.Movies.Count);
+        _logger.LogInformation("Email with new movies was sent");
     }
 
     public async Task SendErrorEmailAsync(string title, string error)
@@ -70,15 +70,32 @@ public class EmailService : IEmailService
     private string ToTextPlain(NewMoviesEmailModel model)
     {
         var result = new StringBuilder();
-        
-        result.AppendLine($"New series available: {model.Movies.Count}");
-        
-        var table = new ConsoleTable("Title", "Info", "Link");
-        
-        foreach (var movie in model.Movies)
-            table.AddRow(movie.Title, movie.Info, movie.Link);
 
-        result.AppendLine(table.ToMarkDownString());
+        if (model.NewMovies.Count > 0)
+        {
+            result.AppendLine($"New series available: {model.NewMovies.Count}");
+            
+            var table = new ConsoleTable("Title", "Info", "Link");
+            
+            foreach (var movie in model.NewMovies)
+                table.AddRow(movie.Title, movie.Info, movie.Link);
+            
+            result.AppendLine(table.ToMarkDownString());
+        }
+
+        if (model.NewSeasons.Count > 0)
+        {
+            result.AppendLine();
+            result.AppendLine($"New season(s) or episode(s) available: {model.NewSeasons.Count}");
+            
+            var table = new ConsoleTable("Title", "Info", "Season", "Episode", "Link");
+            
+            foreach (var movie in model.NewSeasons)
+                table.AddRow(movie.Title, movie.Info, movie.LastSeason, movie.LastEpisode, movie.Link);
+            
+            result.AppendLine(table.ToMarkDownString());
+        }
+
         
         return result.ToString();
     }

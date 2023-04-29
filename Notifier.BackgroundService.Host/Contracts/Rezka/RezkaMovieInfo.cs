@@ -9,4 +9,6 @@ public class RezkaMovieInfo
     public string? Info { get; set; }
     public string? Link { get; set; }
     public MovieState State { get; set; }
+    public int? LastSeason { get; set; }
+    public int? LastEpisode { get; set; }
 }

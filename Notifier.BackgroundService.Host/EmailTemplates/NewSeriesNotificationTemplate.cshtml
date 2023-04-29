@@ -8,30 +8,68 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>There are new movie seasons available: @Model.Movies.Count</title>
+    <title>There are new movie seasons available: @Model.NewMovies.Count</title>
 </head>
 <body>
-    <p>Dear @Model.Name,</p>
-    <p>We're excited to announce that there are @Model.Movies.Count new movie seasons available on our platform!</p>
+<p>Dear @Model.Name,</p>
+<p>We're excited to announce that there are @(Model.NewMovies.Count + Model.NewSeasons.Count) new movie seasons available on our platform!</p>
+
+@if (Model.NewMovies.Count > 0)
+{
     <table>
+        <caption>New movies: @Model.NewMovies.Count</caption>
         <thead>
-            <tr>
-                <th>Title</th>
-                <th>Info</th>
-                <th>Link</th>
-            </tr>
+        <tr>
+            <th>Title</th>
+            <th>Info</th>
+            <th>Link</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var movie in Model.Movies)
-            {
-                <tr>
-                    <td>@movie.Title</td>
-                    <td>@movie.Info</td>
-                    <td><a href="@movie.Link">Link</a></td>
-                </tr>
-            }
+        @foreach (var movie in Model.NewMovies)
+        {
+            <tr>
+                <td>@movie.Title</td>
+                <td>@movie.Info</td>
+                <td>
+                    <a href="@movie.Link">Link</a>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
-    <p>Thank you for using our service!</p>
+}
+
+@if (Model.NewSeasons.Count > 0)
+{
+    <table>
+        <caption>New movies: @Model.NewSeasons.Count</caption>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Info</th>
+            <th>Link</th>
+            <th>Season</th>
+            <th>Episode</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var movie in Model.NewSeasons)
+        {
+            <tr>
+                <td>@movie.Title</td>
+                <td>@movie.Info</td>
+                <td>
+                    <a href="@movie.Link">Link</a>
+                </td>
+                <td>@movie.LastSeason</td>
+                <td>@movie.LastEpisode</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<p>Thank you for using our service!</p>
 </body>
 </html>

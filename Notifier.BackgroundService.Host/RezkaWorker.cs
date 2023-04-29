@@ -24,6 +24,9 @@ public class RezkaWorker : Microsoft.Extensions.Hosting.BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        const int maxRetries = 5;
+        var retryCount = 0;
+        
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -34,13 +37,21 @@ public class RezkaWorker : Microsoft.Extensions.Hosting.BackgroundService
             try
             {
                 await continueMovieService.SyncMoviesAsync();
+                
+                retryCount = 0;
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while syncing movies. Stop worker until error will be fixed.");
-                await SendErrorEmailAsync(scope, e);
+                _logger.LogError(e, "Error while syncing movies. Retry count: {retryCount}", retryCount);
 
-                break;
+                if (retryCount == maxRetries)
+                {
+                    _logger.LogError("Max retries count reached. Stop worker until error will be fixed.");
+                    await SendErrorEmailAsync(scope, e);
+                    break;
+                }
+                
+                ++retryCount;
             }
             
             await Task.Delay(TimeSpan.FromMinutes(_appSettings.RezkaPeriodInMinutes), stoppingToken);

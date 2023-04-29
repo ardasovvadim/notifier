@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Notifier.BackgroundService.Host;
+using Notifier.BackgroundService.Host.AutoMapper;
 using Notifier.BackgroundService.Host.Contracts;
 using Notifier.BackgroundService.Host.Contracts.Configs;
 using Notifier.BackgroundService.Host.Contracts.Emails;
@@ -44,6 +45,8 @@ try
 
                     return engine;
                 });
+
+                services.AddAutoMapper(typeof(NotifierMapperConfig));
 
                 services.AddDbContext<NContext>(options => { options.UseMySQL(context.Configuration.GetConnectionString("DefaultConnection")!); });
 

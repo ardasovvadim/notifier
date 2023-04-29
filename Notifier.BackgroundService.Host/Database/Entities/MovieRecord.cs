@@ -15,13 +15,23 @@ public class MovieRecord
 
     public MovieState State { get; set; }
 
-    public bool Notified { get; set; }
+    public bool Notified { get; protected set; }
 
-    public DateTime? NotifiedAt { get; set; }
+    public DateTime? NotifiedAt { get; protected set; }
 
     public DateTime CreatedAt { get; set; }
     
     public DateTime UpdatedAt { get; set; }
 
     public bool IsRemoved { get; set; }
+
+    public int? LastSeason { get; set; }
+
+    public int? LastEpisode { get; set; }
+    
+    public void SetNotified()
+    {
+        Notified = true;
+        NotifiedAt = DateTime.UtcNow;
+    }
 }

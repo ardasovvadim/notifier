@@ -34,6 +34,12 @@ namespace Notifier.BackgroundService.Host.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("LastEpisode")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LastSeason")
+                        .HasColumnType("int");
+
                     b.Property<string>("Link")
                         .HasColumnType("longtext");
 
