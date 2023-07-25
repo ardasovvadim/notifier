@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Notifier.BackgroundService.Host.Database.Entities;
+namespace Notifier.Database.Database.Entities;
 
 public class MovieRecord
 {

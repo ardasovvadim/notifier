@@ -1,21 +1,22 @@
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-using Notifier.BackgroundService.Host;
 using Notifier.BackgroundService.Host.AutoMapper;
 using Notifier.BackgroundService.Host.Contracts;
 using Notifier.BackgroundService.Host.Contracts.Configs;
 using Notifier.BackgroundService.Host.Contracts.Emails;
 using Notifier.BackgroundService.Host.Contracts.Rezka;
-using Notifier.BackgroundService.Host.Database;
+using Notifier.BackgroundService.Host.Contracts.Telegram;
 using Notifier.BackgroundService.Host.Services.Emails;
 using Notifier.BackgroundService.Host.Services.Rezka;
+using Notifier.BackgroundService.Host.Workers;
+using Notifier.Database.Database;
 using RazorLight;
 using Serilog;
-using Serilog.Events;
+using Telegram.Bot;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
+    // .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
     .WriteTo.Console()
     .WriteTo.File( "logs/log.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
@@ -30,7 +31,14 @@ try
                 var appSettings = config.GetSection(AppSettings.SectionName).Get<AppSettings>()!;
 
                 services.Configure<AppSettings>(config.GetSection(AppSettings.SectionName));
+                services.Configure<VisaCheckerSettings>(config.GetSection(VisaCheckerSettings.SectionName));
+                services.Configure<TelegramBotSettings>(config.GetSection(TelegramBotSettings.SectionName));
                 services.Configure<SendGridSettings>(config.GetSection(SendGridSettings.SectionName));
+                services.AddScoped<ITelegramBotClient, TelegramBotClient>(sp =>
+                {
+                    var secret = config.GetSection("Telegram")["Secret"];
+                    return new TelegramBotClient(secret!);
+                });
 
                 services.AddTransient<IMovieSyncService, MovieSyncService>();
                 services.AddTransient<IRezkaClient, RezkaClient>();
@@ -48,7 +56,10 @@ try
 
                 services.AddAutoMapper(typeof(NotifierMapperConfig));
 
-                services.AddDbContext<NContext>(options => { options.UseMySQL(context.Configuration.GetConnectionString("DefaultConnection")!); });
+                services.AddDbContext<NContext>(options =>
+                {
+                    options.UseMySQL(context.Configuration.GetConnectionString("DefaultConnection")!, b => b.MigrationsAssembly("Notifier.BackgroundService.Host"));
+                });
 
                 services.AddHttpClient(NConsts.RezkaClientName, client => { client.BaseAddress = new Uri(config[$"{AppSettings.SectionName}:{nameof(AppSettings.RezkaUrl)}"]!); })
                     .ConfigureHttpMessageHandlerBuilder(builder =>
@@ -79,7 +90,8 @@ try
                     })
                     ;
 
-                services.AddHostedService<RezkaWorker>();
+                // services.AddHostedService<RezkaWorker>();
+                services.AddHostedService<VisaCheckerWorker>();
             })
             .ConfigureLogging((context, logging) =>
             {

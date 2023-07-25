@@ -1,0 +1,16 @@
+@model Notifier.BackgroundService.Host.Contracts.Emails.VisaDatesAvailableEmailModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New visa dates available</title>
+</head>
+<body>
+    <p>Notifier detected new visa dates: @Model.Dates</p>
+</body>
+</html>

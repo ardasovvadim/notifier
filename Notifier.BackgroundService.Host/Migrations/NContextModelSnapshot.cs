@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Notifier.BackgroundService.Host.Database;
+using Notifier.Database.Database;
 
 #nullable disable
 
@@ -19,7 +19,7 @@ namespace Notifier.BackgroundService.Host.Migrations
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Notifier.BackgroundService.Host.Database.Entities.MovieRecord", b =>
+            modelBuilder.Entity("Notifier.Database.Database.Entities.MovieRecord", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,6 +62,20 @@ namespace Notifier.BackgroundService.Host.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MoviesRecords");
+                });
+
+            modelBuilder.Entity("Notifier.Database.Database.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

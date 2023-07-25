@@ -3,8 +3,8 @@ using ConsoleTables;
 using Microsoft.EntityFrameworkCore;
 using Notifier.BackgroundService.Host.Contracts.Emails;
 using Notifier.BackgroundService.Host.Contracts.Rezka;
-using Notifier.BackgroundService.Host.Database;
-using Notifier.BackgroundService.Host.Database.Entities;
+using Notifier.Database.Database;
+using Notifier.Database.Database.Entities;
 
 namespace Notifier.BackgroundService.Host.Services.Rezka;
 
@@ -49,9 +49,10 @@ public class MovieSyncService : IMovieSyncService
         try
         {
             var newMoviesAvailable = await SyncNewMovieSeriesAvailableAsync(movieInfos);
-            var newSeasonAvailable = await SyncNextMoreMovieSeries(movieInfos);
+            // var newSeasonAvailable = await SyncNextMoreMovieSeries(movieInfos);
+            var newSeasonAvailable = new List<RezkaMovieInfo>();
 
-            if (newMoviesAvailable.Count > 0 && newSeasonAvailable.Count > 0)
+            if (newMoviesAvailable.Count > 0 || newSeasonAvailable.Count > 0)
             {
                 await _emailService.SendNewSeriesAvailableMoviesAsync(new NewMoviesEmailModel
                 {

@@ -27,6 +27,7 @@
         <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Telegram.Bot" Version="19.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -42,5 +43,9 @@
 
     <ItemGroup>
       <None Remove="logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Notifier.Database\Notifier.Database.csproj" />
     </ItemGroup>
 </Project>

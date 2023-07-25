@@ -3,7 +3,7 @@ using Notifier.BackgroundService.Host.Contracts.Configs;
 using Notifier.BackgroundService.Host.Contracts.Emails;
 using Notifier.BackgroundService.Host.Contracts.Rezka;
 
-namespace Notifier.BackgroundService.Host;
+namespace Notifier.BackgroundService.Host.Workers;
 
 public class RezkaWorker : Microsoft.Extensions.Hosting.BackgroundService
 {

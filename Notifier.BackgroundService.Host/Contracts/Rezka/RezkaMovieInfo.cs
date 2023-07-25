@@ -1,4 +1,4 @@
-using Notifier.BackgroundService.Host.Database.Entities;
+using Notifier.Database.Database.Entities;
 
 namespace Notifier.BackgroundService.Host.Contracts.Rezka;
 

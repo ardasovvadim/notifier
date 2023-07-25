@@ -1,9 +1,8 @@
 using System.IO.Compression;
-using System.Net;
 using HtmlAgilityPack;
 using Notifier.BackgroundService.Host.Contracts;
 using Notifier.BackgroundService.Host.Contracts.Rezka;
-using Notifier.BackgroundService.Host.Database.Entities;
+using Notifier.Database.Database.Entities;
 
 namespace Notifier.BackgroundService.Host.Services.Rezka;
 
